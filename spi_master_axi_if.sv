@@ -628,92 +628,92 @@ module spi_master_axi_if #(
   begin
     if ( s_axi_aresetn == 1'b0 )
     begin
-      spi_swrst         = 1'b0;
-      spi_rd            = 1'b0;
-      spi_wr            = 1'b0;
-      spi_qrd           = 1'b0;
-      spi_qwr           = 1'b0;
-      spi_clk_div_valid = 1'b0;
-      spi_clk_div       =  'h0;
-      spi_cmd           =  'h0;
-      spi_addr          =  'h0;
-      spi_cmd_len       =  'h0;
-      spi_addr_len      =  'h0;
-      spi_data_len      =  'h0;
-      spi_dummy_rd    =  'h0;
-      spi_dummy_wr      =  'h0;
-      spi_csreg         =  'h0;
+      spi_swrst         <= 1'b0;
+      spi_rd            <= 1'b0;
+      spi_wr            <= 1'b0;
+      spi_qrd           <= 1'b0;
+      spi_qwr           <= 1'b0;
+      spi_clk_div_valid <= 1'b0;
+      spi_clk_div       <= 'h0;
+      spi_cmd           <= 'h0;
+      spi_addr          <= 'h0;
+      spi_cmd_len       <= 'h0;
+      spi_addr_len      <= 'h0;
+      spi_data_len      <= 'h0;
+      spi_dummy_rd      <= 'h0;
+      spi_dummy_wr      <= 'h0;
+      spi_csreg         <= 'h0;
     end
     else if (write_req)
     begin
-      spi_swrst = 1'b0;
-      spi_rd    = 1'b0;
-      spi_wr    = 1'b0;
-      spi_qrd   = 1'b0;
-      spi_qwr   = 1'b0;
-      spi_clk_div_valid = 1'b0;
+      spi_swrst         <= 1'b0;
+      spi_rd            <= 1'b0;
+      spi_wr            <= 1'b0;
+      spi_qrd           <= 1'b0;
+      spi_qwr           <= 1'b0;
+      spi_clk_div_valid <= 1'b0;
       case(write_address)
         `REG_STATUS:
         begin
           if ( s_axi_wstrb[0] == 1 )
           begin
-            spi_rd = s_axi_wdata[0];
-            spi_wr = s_axi_wdata[1];
-            spi_qrd = s_axi_wdata[2];
-            spi_qwr = s_axi_wdata[3];
-            spi_swrst = s_axi_wdata[4];
+            spi_rd    <= s_axi_wdata[0];
+            spi_wr    <= s_axi_wdata[1];
+            spi_qrd   <= s_axi_wdata[2];
+            spi_qwr   <= s_axi_wdata[3];
+            spi_swrst <= s_axi_wdata[4];
           end
           if ( s_axi_wstrb[1] == 1 )
           begin
-            spi_csreg = s_axi_wdata[11:8];
+            spi_csreg <= s_axi_wdata[11:8];
           end
         end
         `REG_CLKDIV:
           if ( s_axi_wstrb[0] == 1 )
           begin
-            spi_clk_div = s_axi_wdata[7:0];
-            spi_clk_div_valid = 1'b1;
+            spi_clk_div <= s_axi_wdata[7:0];
+            spi_clk_div_valid <= 1'b1;
           end
         `REG_SPICMD:
           for ( int byte_index = 0; byte_index < 4; byte_index = byte_index+1 )
             if ( s_axi_wstrb[byte_index] == 1 )
-              spi_cmd[byte_index*8 +: 8] = s_axi_wdata[(byte_index*8) +: 8];
+              spi_cmd[byte_index*8 +: 8] <= s_axi_wdata[(byte_index*8) +: 8];
         `REG_SPIADR:
           for ( int byte_index = 0; byte_index < 4; byte_index = byte_index+1 )
             if ( s_axi_wstrb[byte_index] == 1 )
-              spi_addr[byte_index*8 +: 8] = s_axi_wdata[(byte_index*8) +: 8];
+              spi_addr[byte_index*8 +: 8] <= s_axi_wdata[(byte_index*8) +: 8];
         `REG_SPILEN:
         begin
           if ( s_axi_wstrb[0] == 1 )
-            spi_cmd_len = s_axi_wdata[7:0];
+            spi_cmd_len <= s_axi_wdata[7:0];
           if ( s_axi_wstrb[1] == 1 )
-            spi_addr_len = s_axi_wdata[15:8];
+            spi_addr_len <= s_axi_wdata[15:8];
           if ( s_axi_wstrb[2] == 1 )
-            spi_data_len[7:0] = s_axi_wdata[23:16];
+            spi_data_len[7:0] <= s_axi_wdata[23:16];
           if ( s_axi_wstrb[3] == 1 )
-            spi_data_len[15:8] = s_axi_wdata[31:24];
+            spi_data_len[15:8] <= s_axi_wdata[31:24];
         end
         `REG_SPIDUM:
         begin
           if ( s_axi_wstrb[0] == 1 )
-            spi_dummy_rd[7:0] = s_axi_wdata[7:0];
+            spi_dummy_rd[7:0] <= s_axi_wdata[7:0];
           if ( s_axi_wstrb[1] == 1 )
-            spi_dummy_rd[15:8] = s_axi_wdata[15:8];
+            spi_dummy_rd[15:8] <= s_axi_wdata[15:8];
           if ( s_axi_wstrb[2] == 1 )
-            spi_dummy_wr[7:0] = s_axi_wdata[23:16];
+            spi_dummy_wr[7:0] <= s_axi_wdata[23:16];
           if ( s_axi_wstrb[3] == 1 )
-            spi_dummy_wr[15:8] = s_axi_wdata[31:24];
+            spi_dummy_wr[15:8] <= s_axi_wdata[31:24];
         end
       endcase
     end
     else
     begin
-      spi_swrst = 1'b0;
-      spi_rd = 1'b0;
-      spi_wr = 1'b0;
-      spi_qrd = 1'b0;
-      spi_qwr = 1'b0;
-      spi_clk_div_valid = 1'b0;
+      spi_swrst         <= 1'b0;
+      spi_rd            <= 1'b0;
+      spi_wr            <= 1'b0;
+      spi_qrd           <= 1'b0;
+      spi_qwr           <= 1'b0;
+      spi_clk_div_valid <= 1'b0;
     end
   end // SLAVE_REG_WRITE_PROC
 
